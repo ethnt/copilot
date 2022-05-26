@@ -1,4 +1,6 @@
 defmodule Copilot.Umbrella.MixProject do
+  @moduledoc false
+
   use Mix.Project
 
   def project do
@@ -52,7 +54,7 @@ defmodule Copilot.Umbrella.MixProject do
   defp dialyzer do
     [
       plt_core_path: "priv/plts",
-      plt_file: {:no_warn, "priv/plts/sorrel.plt"},
+      plt_file: {:no_warn, "priv/plts/copilot.plt"},
       ignore_warnings: ".dialyzer_ignore.exs"
     ]
   end
