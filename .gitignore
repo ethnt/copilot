@@ -24,3 +24,6 @@ erl_crash.dump
 
 # Elixir language server
 /.elixir_ls/
+
+# Dialyzer PLTs
+/priv/plts/

@@ -13,6 +13,7 @@ defmodule Copilot.Accounts.UserToken do
   @reset_password_validity_in_days 1
   @confirm_validity_in_days 7
   @session_validity_in_days 60
+  @change_email_validity_in_days 7
 
   @type t :: %__MODULE__{
           id: integer(),
@@ -23,6 +24,16 @@ defmodule Copilot.Accounts.UserToken do
           user: User.t(),
           inserted_at: NaiveDateTime.t()
         }
+
+  @typedoc """
+  Represents a Base64 URL-encoded token (in plain text)
+  """
+  @type encoded_token :: String.t()
+
+  @typedoc """
+  Represents a token in the form of a binary blob
+  """
+  @type token :: binary()
 
   schema "user_tokens" do
     field :token, :binary
@@ -37,11 +48,11 @@ defmodule Copilot.Accounts.UserToken do
   @doc """
   Generate a token that will be stored in a signed place (session or cookie). No need to hash them in this case
   """
-  @spec build_session_token(User.t()) :: %UserToken{}
+  @spec build_session_token(User.t()) :: {token(), %UserToken{}}
   def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
 
-    %UserToken{token: token, context: "session", user_id: user.id}
+    {token, %UserToken{token: token, context: "session", user_id: user.id}}
   end
 
   @doc """
@@ -49,18 +60,17 @@ defmodule Copilot.Accounts.UserToken do
   it to gain access. The hashed version is in the database and the unhashed version is sent to the user. When the user
   confirms, they will send the unhashed version -- we will hash their input and match against ours in the database
   """
-  @spec build_email_token(User.t(), String.t()) :: {binary, %UserToken{}}
+  @spec build_email_token(User.t(), String.t()) :: {token(), %UserToken{}}
   def build_email_token(%User{email: email} = user, context) do
     build_hashed_token(user, context, email)
   end
 
-  # TODO: Change to return non-encoded tokens (do the url encode elsehwere)
-  @spec build_hashed_token(User.t(), String.t(), String.t()) :: {binary, %UserToken{}}
+  @spec build_hashed_token(User.t(), String.t(), String.t()) :: {token(), %UserToken{}}
   defp build_hashed_token(user, context, sent_to) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    hashed_token = :crypto.hash(@hash_algorithm, token)
+    hashed_token = hash_token(token)
 
-    {Base.url_encode64(token, padding: false),
+    {token,
      %UserToken{
        token: hashed_token,
        context: context,
@@ -88,19 +98,34 @@ defmodule Copilot.Accounts.UserToken do
   Checks if the token is valid and returns its underlying lookup query. The query returns the user found by the token,
   if any. The token is valid if it matches the value in the database and it has not expired
   """
-  # TODO: Change to not use url_decode (do that elsewhere)
-  @spec verify_email_token_query(binary, String.t()) :: {:ok, Ecto.Query.t()} | :error
+  @spec verify_email_token_query(token(), String.t()) :: {:ok, Ecto.Query.t()} | :error
   def verify_email_token_query(token, context) do
-    case Base.url_decode64(token, padding: false) do
-      {:ok, decoded_token} ->
-        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
-        days = days_for_context(context)
+    hashed_token = :crypto.hash(@hash_algorithm, token)
+    days = days_for_context(context)
+
+    query =
+      from token in find_by_token_and_context_query(hashed_token, context),
+        join: user in assoc(token, :user),
+        where: token.inserted_at > ago(^days, "day") and token.sent_to == user.email,
+        select: user
+
+    {:ok, query}
+  end
+
+  @doc """
+  Checks if the token is valid and returns its underlying lookup query. The query returns the user found by the token,
+  if any. The token is valid if it matches the value in the database and it has not expired
+  """
+  @spec verify_change_email_token_query(encoded_token(), String.t()) ::
+          {:ok, Ecto.Query.t()} | :error
+  def verify_change_email_token_query(encoded_token, "change:" <> _ = context) do
+    case decode_token(encoded_token) do
+      {:ok, token} ->
+        hashed_token = hash_token(token)
 
         query =
           from token in find_by_token_and_context_query(hashed_token, context),
-            join: user in assoc(token, :user),
-            where: token.inserted_at > ago(^days, "day") and token.sent_to == user.email,
-            select: user
+            where: token.inserted_at > ago(@change_email_validity_in_days, "day")
 
         {:ok, query}
 
@@ -124,7 +149,8 @@ defmodule Copilot.Accounts.UserToken do
   @doc """
   Returns a query to find a token based on a given user and a list of contexts (or `:all`)
   """
-  @spec find_by_user_and_context_query(User.t(), :all | nonempty_maybe_improper_list) :: Ecto.Query.t()
+  @spec find_by_user_and_context_query(User.t(), :all | nonempty_maybe_improper_list) ::
+          Ecto.Query.t()
   def find_by_user_and_context_query(user, :all) do
     from t in UserToken, where: t.user_id == ^user.id
   end
@@ -133,13 +159,18 @@ defmodule Copilot.Accounts.UserToken do
     from t in UserToken, where: t.user_id == ^user.id and t.context in ^contexts
   end
 
-  @spec encode_token(binary) :: String.t()
+  @spec encode_token(binary) :: encoded_token()
   def encode_token(token) when is_binary(token) do
     Base.url_encode64(token, padding: false)
   end
 
-  @spec decode_token(String.t()) :: {:ok, binary()} | :error
+  @spec decode_token(String.t()) :: {:ok, token()} | :error
   def decode_token(token) do
     Base.url_decode64(token, padding: false)
+  end
+
+  @spec hash_token(token()) :: binary()
+  def hash_token(token) do
+    :crypto.hash(@hash_algorithm, token)
   end
 end
