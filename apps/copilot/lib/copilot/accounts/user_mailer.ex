@@ -3,6 +3,7 @@ defmodule Copilot.Accounts.UserMailer do
 
   import Swoosh.Email
 
+  alias Copilot.Accounts.User
   alias Copilot.Mailer
 
   @spec deliver(String.t(), String.t(), String.t()) :: {:ok, Swoosh.Email.t()} | {:error, any()}
