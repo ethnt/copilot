@@ -22,4 +22,8 @@ erl_crash.dump
 # Temporary files, for example, from tests.
 /tmp
 
+# Elixir language server
+/.elixir_ls/
 
+# Dialyzer PLTs
+/priv/plts/
