@@ -59,4 +59,25 @@ defmodule Copilot.DataCase do
       end)
     end)
   end
+
+  @spec map_ids([Ecto.Schema.t()]) :: [integer()]
+  def map_ids(records) do
+    Enum.map(records, fn r -> r.id end)
+  end
+
+  @spec matching_ids([Ecto.Schema.t()], [Ecto.Schema.t()]) :: boolean()
+  def matching_ids(expected, actual) do
+    expected_ids = map_ids(expected)
+    actual_ids = map_ids(actual)
+
+    Enum.sort(expected_ids) == Enum.sort(actual_ids)
+  end
+
+  @spec matching_ordered_ids([Ecto.Schema.t()], [Ecto.Schema.t()]) :: boolean()
+  def matching_ordered_ids(expected, actual) do
+    expected_ids = map_ids(expected)
+    actual_ids = map_ids(actual)
+
+    expected_ids == actual_ids
+  end
 end
