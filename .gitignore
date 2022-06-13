@@ -27,3 +27,6 @@ erl_crash.dump
 
 # Dialyzer PLTs
 /priv/plts/
+
+# macOS detritus
+.DS_Store

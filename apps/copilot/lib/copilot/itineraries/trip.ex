@@ -6,7 +6,7 @@ defmodule Copilot.Itineraries.Trip do
   import Ecto.Changeset
 
   alias Copilot.Accounts.User
-  alias Copilot.Itineraries.Trip
+  alias Copilot.Itineraries.{Flight, Trip}
 
   @type t :: %__MODULE__{
           id: integer(),
@@ -16,6 +16,7 @@ defmodule Copilot.Itineraries.Trip do
           end_date: Date.t(),
           user_id: integer(),
           user: User.t(),
+          flights: [Flight.t()] | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -27,6 +28,8 @@ defmodule Copilot.Itineraries.Trip do
     field :end_date, :date
 
     belongs_to :user, User
+
+    has_many :flights, Flight
 
     timestamps()
   end
