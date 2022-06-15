@@ -4,7 +4,7 @@ defmodule Copilot.Itineraries do
   import Ecto.Query
 
   alias Copilot.Accounts.User
-  alias Copilot.Itineraries.{Flight, Trip}
+  alias Copilot.Itineraries.{Plan, Trip}
   alias Copilot.Repo
 
   @doc """
@@ -43,13 +43,18 @@ defmodule Copilot.Itineraries do
     Repo.delete(trip)
   end
 
+  @spec find_plans_by_trip_and_type(Trip.t(), String.t()) :: [Plan.t()]
+  def find_plans_by_trip_and_type(trip, type) do
+    Repo.all(Plan.find_by_trip_and_type_query(trip, type))
+  end
+
   @doc """
-  Create a new flight with flight segments.
+  Create a new plan
   """
-  @spec create_flight(map(), Trip.t()) :: {:ok, Flight.t()} | {:error, Ecto.Changeset.t()}
-  def create_flight(attrs, trip) do
-    %Flight{}
-    |> Flight.create_changeset(attrs, trip)
+  @spec create_plan(map(), Trip.t()) :: {:ok, Plan.t()} | {:error, Ecto.Changeset.t()}
+  def create_plan(attrs, trip) do
+    %Plan{}
+    |> Plan.create_changeset(attrs, trip)
     |> Repo.insert()
   end
 end

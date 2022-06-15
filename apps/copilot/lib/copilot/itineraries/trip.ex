@@ -5,8 +5,10 @@ defmodule Copilot.Itineraries.Trip do
 
   import Ecto.Changeset
 
+  import Copilot.Helpers
+
   alias Copilot.Accounts.User
-  alias Copilot.Itineraries.{Flight, Trip}
+  alias Copilot.Itineraries.{Plan, Trip}
 
   @type t :: %__MODULE__{
           id: integer(),
@@ -14,9 +16,9 @@ defmodule Copilot.Itineraries.Trip do
           description: String.t() | nil,
           start_date: Date.t(),
           end_date: Date.t(),
+          plans: [Plan.t()],
           user_id: integer(),
           user: User.t(),
-          flights: [Flight.t()] | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -29,7 +31,7 @@ defmodule Copilot.Itineraries.Trip do
 
     belongs_to :user, User
 
-    has_many :flights, Flight
+    has_many :plans, Plan
 
     timestamps()
   end
@@ -49,19 +51,5 @@ defmodule Copilot.Itineraries.Trip do
     |> cast(attrs, [:name, :description, :start_date, :end_date])
     |> validate_required([:name, :description, :start_date, :end_date])
     |> validate_date_order()
-  end
-
-  @spec validate_date_order(Ecto.Changeset.t()) :: Ecto.Changeset.t()
-  defp validate_date_order(changeset) do
-    with %Date{} = start_date <- get_field(changeset, :start_date),
-         %Date{} = end_date <- get_field(changeset, :end_date) do
-      if Date.compare(start_date, end_date) == :gt do
-        add_error(changeset, :end_date, "must be after the start date")
-      else
-        changeset
-      end
-    else
-      _ -> changeset
-    end
   end
 end

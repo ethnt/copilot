@@ -42,7 +42,8 @@ defmodule Copilot.MixProject do
       {:jason, "~> 1.2"},
       {:swoosh, "~> 1.3"},
       {:argon2_elixir, "~> 3.0.0"},
-      {:ex_machina, "~> 2.7.0"}
+      {:ex_machina, "~> 2.7.0"},
+      {:polymorphic_embed, "~> 1.9"}
     ]
   end
 

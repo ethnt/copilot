@@ -64,4 +64,52 @@ defmodule Copilot.Factory do
       }
     )
   end
+
+  @spec plan_factory :: %Copilot.Itineraries.Plan{}
+  def plan_factory do
+    %Copilot.Itineraries.Plan{
+      canonical_start: DateTime.utc_now(),
+      canonical_end: DateTime.utc_now(),
+      trip: build(:trip)
+    }
+  end
+
+  @spec activity_factory :: Copilot.Itineraries.Activity.t()
+  def activity_factory do
+    %Copilot.Itineraries.Activity{
+      name: "Hiking",
+      start_time: ~U[2022-01-01 20:00:00Z],
+      end_time: ~U[2022-01-02 20:00:00Z]
+    }
+  end
+
+  @spec activity_plan_factory :: Copilot.Itineraries.Plan.t()
+  def activity_plan_factory do
+    struct!(
+      plan_factory(),
+      %{
+        attributes: activity_factory()
+      }
+    )
+  end
+
+  @spec flight_factory :: Copilot.Itineraries.Flight.t()
+  def flight_factory do
+    %Copilot.Itineraries.Flight{
+      booking_reference: "ABCDE",
+      flight_segments: build_list(3, :flight_segment)
+    }
+  end
+
+  @spec flight_segment_factory :: Copilot.Itineraries.FlightSegment.t()
+  def flight_segment_factory do
+    %Copilot.Itineraries.FlightSegment{
+      airline: "SAS",
+      number: "123",
+      origin: "JFK",
+      destination: "CPH",
+      departure_time: sequence(:flight_time, &(DateTime.utc_now() |> DateTime.add(&1, :second))),
+      arrival_time: sequence(:flight_time, &(DateTime.utc_now() |> DateTime.add(&1, :second)))
+    }
+  end
 end
