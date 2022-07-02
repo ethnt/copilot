@@ -1,15 +1,14 @@
 defmodule Copilot.Itineraries.Activity do
   @moduledoc false
 
-  @behaviour Copilot.Itineraries.Plan.Kind
-
   use Ecto.Schema
 
+  import Copilot.Helpers
   import Ecto.Changeset
 
-  import Copilot.Helpers
-
   alias Copilot.Itineraries.{Activity, Plan}
+
+  @behaviour Plan.Kind
 
   @type t :: %__MODULE__{
           name: String.t(),
@@ -23,6 +22,7 @@ defmodule Copilot.Itineraries.Activity do
     field :end_time, :utc_datetime
   end
 
+  @impl Plan.Kind
   @spec changeset(%Activity{} | Ecto.Changeset.t(), map()) :: Ecto.Changeset.t()
   def changeset(activity, attrs) do
     activity

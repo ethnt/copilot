@@ -1,13 +1,13 @@
 defmodule Copilot.Itineraries.Flight do
   @moduledoc false
 
-  @behaviour Copilot.Itineraries.Plan.Kind
-
   use Ecto.Schema
+
+  import Ecto.Changeset
 
   alias Copilot.Itineraries.{Flight, FlightSegment, Plan}
 
-  import Ecto.Changeset
+  @behaviour Plan.Kind
 
   @type t :: %__MODULE__{
           booking_reference: String.t(),
@@ -20,6 +20,7 @@ defmodule Copilot.Itineraries.Flight do
     embeds_many :flight_segments, FlightSegment
   end
 
+  @impl Plan.Kind
   @spec changeset(%Flight{} | Ecto.Changeset.t(), map()) :: Ecto.Changeset.t()
   def changeset(flight, attrs) do
     flight

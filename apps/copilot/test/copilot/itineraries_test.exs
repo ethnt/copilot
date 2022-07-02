@@ -80,21 +80,21 @@ defmodule Copilot.ItinerariesTest do
     end
   end
 
-  describe "create_plan/2 with activity" do
+  describe "create_plan/3 with activity" do
     test "requires a name", %{trip: trip} do
-      {:error, changeset} = Itineraries.create_plan(%{attributes: %{__type__: "activity"}}, trip)
+      {:error, changeset} = Itineraries.create_plan(%{}, "activity", trip)
 
       assert "can't be blank" in errors_on(changeset).attributes.name
     end
 
     test "requires a start time", %{trip: trip} do
-      {:error, changeset} = Itineraries.create_plan(%{attributes: %{__type__: "activity"}}, trip)
+      {:error, changeset} = Itineraries.create_plan(%{}, "activity", trip)
 
       assert "can't be blank" in errors_on(changeset).attributes.start_time
     end
 
     test "requires an end time", %{trip: trip} do
-      {:error, changeset} = Itineraries.create_plan(%{attributes: %{__type__: "activity"}}, trip)
+      {:error, changeset} = Itineraries.create_plan(%{}, "activity", trip)
 
       assert "can't be blank" in errors_on(changeset).attributes.end_time
     end
@@ -103,13 +103,11 @@ defmodule Copilot.ItinerariesTest do
       {:error, changeset} =
         Itineraries.create_plan(
           %{
-            attributes: %{
-              __type__: "activity",
-              name: "Hiking",
-              start_time: ~U[2022-01-01 10:00:00Z],
-              end_time: ~U[2022-01-01 09:00:00Z]
-            }
+            name: "Hiking",
+            start_time: ~U[2022-01-01 10:00:00Z],
+            end_time: ~U[2022-01-01 09:00:00Z]
           },
+          "activity",
           trip
         )
 
@@ -117,13 +115,7 @@ defmodule Copilot.ItinerariesTest do
     end
 
     test "returns a plan with valid attributes", %{trip: trip} do
-      {:ok, plan} =
-        Itineraries.create_plan(
-          %{
-            attributes: Map.merge(%{__type__: "activity"}, params_for(:activity))
-          },
-          trip
-        )
+      {:ok, plan} = Itineraries.create_plan(params_for(:activity), "activity", trip)
 
       assert plan.trip_id == trip.id
       assert %Copilot.Itineraries.Activity{} = activity = plan.attributes
@@ -131,13 +123,7 @@ defmodule Copilot.ItinerariesTest do
     end
 
     test "properly derives canonical date and time", %{trip: trip} do
-      {:ok, plan} =
-        Itineraries.create_plan(
-          %{
-            attributes: Map.merge(%{__type__: "activity"}, params_for(:activity))
-          },
-          trip
-        )
+      {:ok, plan} = Itineraries.create_plan(params_for(:activity), "activity", trip)
 
       assert %Copilot.Itineraries.Activity{} = activity = plan.attributes
       assert activity.start_time == plan.canonical_start
@@ -145,22 +131,15 @@ defmodule Copilot.ItinerariesTest do
     end
   end
 
-  describe "create_plan/2 with flight" do
+  describe "create_plan/3 with flight" do
     test "requires flight segments", %{trip: trip} do
-      {:error, changeset} =
-        Itineraries.create_plan(%{attributes: %{__type__: "flight", flight_segments: []}}, trip)
+      {:error, changeset} = Itineraries.create_plan(%{flight_segments: []}, "flight", trip)
 
       assert "can't be blank" in errors_on(changeset).attributes.flight_segments
     end
 
     test "returns a plan with valid attributes", %{trip: trip} do
-      {:ok, plan} =
-        Itineraries.create_plan(
-          %{
-            attributes: Map.merge(%{__type__: "flight"}, params_for(:flight))
-          },
-          trip
-        )
+      {:ok, plan} = Itineraries.create_plan(params_for(:flight), "flight", trip)
 
       assert plan.trip_id == trip.id
       assert %Copilot.Itineraries.Flight{} = flight = plan.attributes
@@ -171,27 +150,25 @@ defmodule Copilot.ItinerariesTest do
       {:ok, plan} =
         Itineraries.create_plan(
           %{
-            attributes: %{
-              __type__: "flight",
-              flight_segments: [
-                params_for(:flight_segment,
-                  airline: "middle",
-                  departure_time: ~U[2022-01-02 20:00:00Z],
-                  arrival_time: ~U[2022-01-02 21:00:00Z]
-                ),
-                params_for(:flight_segment,
-                  airline: "last",
-                  departure_time: ~U[2022-01-03 20:00:00Z],
-                  arrival_time: ~U[2022-01-03 21:00:00Z]
-                ),
-                params_for(:flight_segment,
-                  airline: "first",
-                  departure_time: ~U[2022-01-01 20:00:00Z],
-                  arrival_time: ~U[2022-01-01 21:00:00Z]
-                )
-              ]
-            }
+            flight_segments: [
+              params_for(:flight_segment,
+                airline: "middle",
+                departure_time: ~U[2022-01-02 20:00:00Z],
+                arrival_time: ~U[2022-01-02 21:00:00Z]
+              ),
+              params_for(:flight_segment,
+                airline: "last",
+                departure_time: ~U[2022-01-03 20:00:00Z],
+                arrival_time: ~U[2022-01-03 21:00:00Z]
+              ),
+              params_for(:flight_segment,
+                airline: "first",
+                departure_time: ~U[2022-01-01 20:00:00Z],
+                arrival_time: ~U[2022-01-01 21:00:00Z]
+              )
+            ]
           },
+          "flight",
           trip
         )
 
@@ -208,17 +185,15 @@ defmodule Copilot.ItinerariesTest do
       {:error, changeset} =
         Itineraries.create_plan(
           %{
-            attributes: %{
-              __type__: "flight",
-              flight_segments: [
-                params_for(:flight_segment,
-                  airline: "middle",
-                  departure_time: ~U[2022-01-02 20:00:00Z],
-                  arrival_time: ~U[2022-01-01 21:00:00Z]
-                )
-              ]
-            }
+            flight_segments: [
+              params_for(:flight_segment,
+                airline: "middle",
+                departure_time: ~U[2022-01-02 20:00:00Z],
+                arrival_time: ~U[2022-01-01 21:00:00Z]
+              )
+            ]
           },
+          "flight",
           trip
         )
 
@@ -226,13 +201,7 @@ defmodule Copilot.ItinerariesTest do
     end
 
     test "properly derives canonical date and time", %{trip: trip} do
-      {:ok, plan} =
-        Itineraries.create_plan(
-          %{
-            attributes: Map.merge(%{__type__: "flight"}, params_for(:flight))
-          },
-          trip
-        )
+      {:ok, plan} = Itineraries.create_plan(params_for(:flight), "flight", trip)
 
       assert %Copilot.Itineraries.Flight{} = flight = plan.attributes
 
@@ -240,6 +209,47 @@ defmodule Copilot.ItinerariesTest do
                flight.flight_segments |> List.first() |> Map.get(:departure_time)
 
       assert plan.canonical_end == flight.flight_segments |> List.last() |> Map.get(:arrival_time)
+    end
+  end
+
+  describe "create_plan/3 with lodging" do
+    test "requires a name", %{trip: trip} do
+      {:error, changeset} = Itineraries.create_plan(%{}, "lodging", trip)
+
+      assert "can't be blank" in errors_on(changeset).attributes.name
+    end
+
+    test "requires an address", %{trip: trip} do
+      {:error, changeset} = Itineraries.create_plan(%{}, "lodging", trip)
+
+      assert "can't be blank" in errors_on(changeset).attributes.address
+    end
+
+    test "requires a check in", %{trip: trip} do
+      {:error, changeset} = Itineraries.create_plan(%{}, "lodging", trip)
+
+      assert "can't be blank" in errors_on(changeset).attributes.check_in
+    end
+
+    test "requires a check out", %{trip: trip} do
+      {:error, changeset} = Itineraries.create_plan(%{}, "lodging", trip)
+
+      assert "can't be blank" in errors_on(changeset).attributes.check_out
+    end
+
+    test "requires the check out time to be after the check in time", %{trip: trip} do
+      {:error, changeset} =
+        Itineraries.create_plan(
+          %{
+            name: "Overlook Hotel",
+            check_in: ~U[2022-01-01 10:00:00Z],
+            check_out: ~U[2022-01-01 09:00:00Z]
+          },
+          "lodging",
+          trip
+        )
+
+      assert "must be after the check in time" in errors_on(changeset).attributes.check_out
     end
   end
 end

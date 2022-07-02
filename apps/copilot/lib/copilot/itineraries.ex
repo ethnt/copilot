@@ -43,18 +43,21 @@ defmodule Copilot.Itineraries do
     Repo.delete(trip)
   end
 
+  @doc """
+  Find plans based on trip and type
+  """
   @spec find_plans_by_trip_and_type(Trip.t(), String.t()) :: [Plan.t()]
   def find_plans_by_trip_and_type(trip, type) do
     Repo.all(Plan.find_by_trip_and_type_query(trip, type))
   end
 
   @doc """
-  Create a new plan
+  Create a new plan with just the kind's attributes
   """
-  @spec create_plan(map(), Trip.t()) :: {:ok, Plan.t()} | {:error, Ecto.Changeset.t()}
-  def create_plan(attrs, trip) do
+  @spec create_plan(map(), String.t(), Trip.t()) :: {:ok, Plan.t()} | {:error, Ecto.Changeset.t()}
+  def create_plan(attrs, kind, trip) do
     %Plan{}
-    |> Plan.create_changeset(attrs, trip)
+    |> Plan.create_changeset(attrs, kind, trip)
     |> Repo.insert()
   end
 end

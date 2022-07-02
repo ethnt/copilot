@@ -7,7 +7,7 @@ defmodule Copilot.Itineraries.Plan do
   import Ecto.Query
   import PolymorphicEmbed, only: [cast_polymorphic_embed: 3]
 
-  alias Copilot.Itineraries.{Activity, Flight, Plan, Trip}
+  alias Copilot.Itineraries.{Activity, Flight, Lodging, Plan, Trip}
 
   @type t :: %__MODULE__{
           id: integer(),
@@ -29,7 +29,8 @@ defmodule Copilot.Itineraries.Plan do
     field :attributes, PolymorphicEmbed,
       types: [
         flight: Flight,
-        activity: Activity
+        activity: Activity,
+        lodging: Lodging
       ],
       on_type_not_found: :raise,
       on_replace: :update
@@ -43,8 +44,18 @@ defmodule Copilot.Itineraries.Plan do
   Creation changeset for plans with explicit type added to the attributes
   """
   @spec create_changeset(%Plan{}, map(), String.t(), Trip.t()) :: Ecto.Changeset.t()
-  def create_changeset(plan, attrs, type, trip) do
-    attrs = finalize_attrs(attrs, type)
+  def create_changeset(plan, attrs, kind, trip) do
+    # Creates something like:
+    #   %{attributes: %{__type__: "activity", name: "Hiking", ...}}
+    attrs = %{
+      attributes:
+        Map.merge(
+          %{__type__: kind},
+          attrs,
+          fn _, a, b -> Map.merge(a, b) end
+        )
+    }
+
     create_changeset(plan, attrs, trip)
   end
 
@@ -68,15 +79,5 @@ defmodule Copilot.Itineraries.Plan do
     from p in Plan,
       where: p.trip_id == ^trip_id,
       where: p.attributes["__type__"] == ^type
-  end
-
-  # Adds the type attribute if it's not already there
-  @spec finalize_attrs(map(), String.t()) :: map()
-  defp finalize_attrs(attrs, type) do
-    Map.merge(
-      attrs,
-      %{attributes: %{__type__: type}},
-      fn _, a, b -> Map.merge(a, b) end
-    )
   end
 end

@@ -83,16 +83,6 @@ defmodule Copilot.Factory do
     }
   end
 
-  @spec activity_plan_factory :: Copilot.Itineraries.Plan.t()
-  def activity_plan_factory do
-    struct!(
-      plan_factory(),
-      %{
-        attributes: activity_factory()
-      }
-    )
-  end
-
   @spec flight_factory :: Copilot.Itineraries.Flight.t()
   def flight_factory do
     %Copilot.Itineraries.Flight{
@@ -110,6 +100,18 @@ defmodule Copilot.Factory do
       destination: "CPH",
       departure_time: sequence(:flight_time, &(DateTime.utc_now() |> DateTime.add(&1, :second))),
       arrival_time: sequence(:flight_time, &(DateTime.utc_now() |> DateTime.add(&1, :second)))
+    }
+  end
+
+  @spec lodging_factory :: Copilot.Itineraries.Lodging.t()
+  def lodging_factory do
+    %Copilot.Itineraries.Lodging{
+      name: "Overlook Hotel",
+      address: %{
+        street: "whatever"
+      },
+      check_in: sequence(:datetime, &(DateTime.utc_now() |> DateTime.add(&1, :second))),
+      check_out: sequence(:datetime, &(DateTime.utc_now() |> DateTime.add(&1, :second))),
     }
   end
 end
