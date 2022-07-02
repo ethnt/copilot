@@ -111,7 +111,7 @@ defmodule Copilot.Factory do
         street: "whatever"
       },
       check_in: sequence(:datetime, &(DateTime.utc_now() |> DateTime.add(&1, :second))),
-      check_out: sequence(:datetime, &(DateTime.utc_now() |> DateTime.add(&1, :second))),
+      check_out: sequence(:datetime, &(DateTime.utc_now() |> DateTime.add(&1, :second)))
     }
   end
 end
