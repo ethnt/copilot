@@ -1,0 +1,8 @@
+.page {
+  margin-top: var(--spacing-m);
+}
+
+.page__title {
+  font-size: var(--font-size--large);
+  font-weight: var(--font-weight--bold);
+}

@@ -26,7 +26,8 @@ config :copilot_web, CopilotWeb.Endpoint,
   secret_key_base: "xCZz/pyxvV+ddb2Th9YBbaiNw4EnDgj+JSm6L+vvcyDykkQFeOf5JgDOmloTxYNf",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    node: ["build.js", "--watch", cd: Path.expand("../apps/copilot_web/assets", __DIR__)]
   ]
 
 # ## SSL Support

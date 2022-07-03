@@ -1,0 +1,14 @@
+.button {
+  background: var(--color--text);
+  display: block;
+  color: var(--color--white);
+  border: none;
+  outline: none;
+  padding: 0 var(--spacing-xs);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size--small);
+
+  &:hover {
+    background: var(--color--text--darker);
+  }
+}

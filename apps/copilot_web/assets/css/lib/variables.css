@@ -1,0 +1,42 @@
+:root {
+  --color--background: #eef0ed;
+  --color--background--darker: #f0d3ce;
+  --color--background--darkest: #e4afa7;
+  --color--text: #2b3826;
+  --color--text--lighter: #6a7865;
+  --color--text--lightest: #959e91;
+  --color--text--darker: #212e1c;
+  --color--white: #fff;
+
+  --font-family--sans-serif: "GT America", Helvetica, Arial, sans-serif;
+  --font-family--serif: "GT Alpina", Times New Roman, Times, serif;
+  --font-family--monospace: "GT Alpina Typewriter", Courier New, Courier, monospace;
+
+  --font-size--base: 20px;
+  --font-size--small: 16px;
+  --font-size--medium: 24px;
+  --font-size--large: 30px;
+  --font-weight--light: 300;
+  --font-weight--regular: 400;
+  --font-weight--semibold: 500;
+  --font-weight--bold: 600;
+
+  --line-height--base: 1.75;
+  --line-height--normal: calc(1.75 * 1rem);
+
+  --spacing: 1.5em;
+  --spacing-xs: calc(0.3 * var(--spacing));
+  --spacing-s: calc(0.5 * var(--spacing));
+  --spacing-m: var(--spacing);
+  --spacing-l: calc(1.5 * var(--spacing));
+  --spacing-xl: calc(2.5 * var(--spacing));
+  --spacing-xxl: calc(5 * var(--spacing));
+  --spacing-col: calc(6 * var(--spacing));
+  --spacing-width-max: 42rem;
+  --spacing-width-tiny: 20rem;
+  --spacing-width-xl: 52rem;
+
+  --breakpoint: 1820px;
+
+  --border-radius: 2px;
+}

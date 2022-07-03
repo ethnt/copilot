@@ -1,0 +1,23 @@
+<.form class="form form--half" let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+  <div class="form__field">
+    <%= label f, :name %>
+    <%= text_input f, :name, required: true %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form__field">
+    <%= label f, :email %>
+    <%= email_input f, :email, required: true %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="form__field">
+    <%= label f, :password %>
+    <%= password_input f, :password, required: true %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <div>
+    <%= submit "Register" %>
+  </div>
+</.form>

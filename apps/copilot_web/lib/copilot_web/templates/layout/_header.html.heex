@@ -1,0 +1,22 @@
+<header class="header">
+  <aside class="header__left">
+    <h1 class="header__logo">
+      <a href="/">Copilot</a>
+    </h1>
+    <ul class="nav nav--right">
+      <%= if @current_user do %>
+        <li><a href={Routes.page_path(@conn, :index)}>Trips</a></li>
+      <% end %>
+    </ul>
+  </aside>
+  <nav class="header__right">
+    <ul class="nav nav--right">
+      <%= if @current_user do %>
+        <li><a href={Routes.sessions_path(@conn, :destroy)}>Logout</a></li>
+      <% else %>
+        <li><a href={Routes.sessions_path(@conn, :new)}>Login</a></li>
+        <li><a href={Routes.user_registration_path(@conn, :new)}>Register</a></li>
+      <% end %>
+    </ul>
+  </nav>
+</header>

@@ -50,6 +50,8 @@ defmodule CopilotWeb.Router do
     get "/settings", UserSettingsController, :edit
     patch "/settings", UserSettingsController, :update
     get "/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    resources "/trips", TripsController
   end
 
   # Other scopes may use custom stacks.
