@@ -1,0 +1,73 @@
+@font-face {
+  font-family: "GT Alpina";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Light-Trial.woff2") format("woff2");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "GT Alpina";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Regular-Trial.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "GT Alpina";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Standard-Regular-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "GT Alpina";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Medium-Trial.woff2") format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "GT Alpina";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Bold-Trial.woff2") format("woff2");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "GT Alpina Typewriter";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Typewriter-Regular-Trial.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "GT Alpina Typewriter";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Typewriter-Medium-Trial.woff2") format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "GT Alpina Typewriter";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Typewriter-Bold-Trial.woff2") format("woff2");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "GT Alpina Typewriter";
+  src: url("../../fonts/gt-alpina/GT-Alpina-Typewriter-Regular-Italic-Trial.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "GT America";
+  src: url("../../fonts/gt-america/GT-America-Standard-Regular-Trial.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "GT America";
+  src: url("../../fonts/gt-america/GT-America-Standard-Medium-Trial.woff2") format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "GT America";
+  src: url("../../fonts/gt-america/GT-America-Standard-Bold-Trial.woff2") format("woff2");
+  font-weight: 600;
+}

@@ -1,0 +1,30 @@
+a {
+  display: inline;
+  background-image: linear-gradient(var(--color--background),
+      var(--color--background)),
+    linear-gradient(var(--color--background), var(--color--background)),
+    linear-gradient(var(--color--background--darker),
+      var(--color--background--darker));
+  background-size: 0.1em 0.01em, 0.1em 0.07em, 0.07em 0.07em;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  background-position-y: 98%, 98%, 98%;
+  background-position-x: 0%, 100%, 0%;
+  color: var(--color-text);
+  opacity: 0.8;
+  text-decoration: none;
+  text-shadow: 0.1em 0em var(--color--background),
+    0.1em 0.02em var(--color--background), 0.1em 0.04em var(--color--background),
+    -0.1em 0.06em var(--color--background),
+    -0.1em 0.04em var(--color--background),
+    -0.1em 0.02em var(--color--background), -0.1em 0em var(--color--background),
+    0.1em -0.02em var(--color--background);
+}
+
+a:hover {
+  background-image: linear-gradient(var(--color--background),
+      var(--color--background)),
+    linear-gradient(var(--color--background), var(--color--background)),
+    linear-gradient(var(--color--background--darkest),
+      var(--color--background--darkest));
+  opacity: 1;
+}

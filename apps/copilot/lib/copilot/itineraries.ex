@@ -15,6 +15,11 @@ defmodule Copilot.Itineraries do
     Repo.all(from t in Trip, where: t.user_id == ^user.id, order_by: t.start_date)
   end
 
+  @spec find_trip_by_user_and_id(User.t(), integer()) :: Trip.t() | nil
+  def find_trip_by_user_and_id(user, id) do
+    Repo.one(from t in Trip, where: t.id == ^id, where: t.user_id == ^user.id)
+  end
+
   @doc """
   Create a new trip
   """

@@ -1,7 +1,19 @@
-<.form let={f} for={@conn} action={Routes.sessions_path(@conn, :create)} as={:user}>
+<.form class="form form--half" let={f} for={@conn} action={Routes.sessions_path(@conn, :create)} as={:user}>
   <%= if @error_message do %>
     <%= @error_message %>
   <% end %>
 
-  <%= label f, :email %>
+  <div class="form__field">
+    <%= label f, :email, class: "form__label" %>
+    <%= email_input f, :email, required: true, class: "form__control" %>
+  </div>
+
+  <div class="form__field">
+    <%= label f, :password, class: "form__label" %>
+    <%= password_input f, :password, required: true, class: "form__control" %>
+  </div>
+
+  <footer class="form__footer">
+    <%= submit "Login", class: "button" %>
+  </footer>
 </.form>
