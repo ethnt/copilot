@@ -70,7 +70,7 @@ defmodule CopilotWeb.UserSettingsController do
   end
 
   @spec assign_email_and_password_changesets(Plug.Conn.t(), any()) :: Plug.Conn.t()
-  defp assign_email_and_password_changesets(conn, _opts) do
+  defp assign_email_and_password_changesets(conn, _params) do
     user = conn.assigns.current_user
 
     conn

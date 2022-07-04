@@ -1,0 +1,5 @@
+<.form class="form form--half" let={f} for={@changeset} action={Routes.trips_path(@conn, :update, @current_trip.id)}>
+  <%= render "_form.html", f: f, button_label: "Save" %>
+</.form>
+
+<%= link "Delete", to: Routes.trips_path(@conn, :delete, @current_trip.id), method: :delete %>

@@ -40,7 +40,7 @@ defmodule Copilot.Itineraries.Trip do
   def create_changeset(trip, attrs, user) do
     trip
     |> cast(attrs, [:name, :description, :start_date, :end_date])
-    |> validate_required([:name, :description, :start_date, :end_date])
+    |> validate_required([:name, :start_date, :end_date])
     |> validate_date_order()
     |> put_assoc(:user, user)
   end
@@ -49,7 +49,7 @@ defmodule Copilot.Itineraries.Trip do
   def update_changeset(trip, attrs) do
     trip
     |> cast(attrs, [:name, :description, :start_date, :end_date])
-    |> validate_required([:name, :description, :start_date, :end_date])
+    |> validate_required([:name, :start_date, :end_date])
     |> validate_date_order()
   end
 end
