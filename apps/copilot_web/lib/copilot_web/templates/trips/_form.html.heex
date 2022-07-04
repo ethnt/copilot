@@ -1,0 +1,27 @@
+<div class="form__field">
+  <%= label @f, :name, class: "form__label" %>
+  <%= text_input @f, :name, required: true, class: "form__control" %>
+  <%= error_tag @f, :name %>
+</div>
+
+<div class="form__field">
+  <%= label @f, :description, class: "form__label" %>
+  <%= textarea @f, :description, class: "form__control" %>
+  <%= error_tag @f, :description %>
+</div>
+
+<div class="form__field">
+  <%= label @f, :start_date, class: "form__label" %>
+  <%= date_input @f, :start_date, required: true, class: "form__control" %>
+  <%= error_tag @f, :start_date %>
+</div>
+
+<div class="form__field">
+  <%= label @f, :end_date, class: "form__label" %>
+  <%= date_input @f, :end_date, required: true, class: "form__control" %>
+  <%= error_tag @f, :end_date %>
+</div>
+
+<div>
+  <%= submit @button_label %>
+</div>

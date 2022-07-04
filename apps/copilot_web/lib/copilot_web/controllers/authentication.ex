@@ -43,7 +43,7 @@ defmodule CopilotWeb.Authentication do
   end
 
   @spec fetch_current_user(Plug.Conn.t(), any()) :: Plug.Conn.t()
-  def fetch_current_user(conn, _opts) do
+  def fetch_current_user(conn, _params) do
     {encoded_token, conn} = ensure_user_token(conn)
     user = encoded_token && Accounts.find_user_by_session_token(encoded_token)
     assign(conn, :current_user, user)
@@ -89,7 +89,7 @@ defmodule CopilotWeb.Authentication do
   Require an unauthenticated user
   """
   @spec require_unauthenticated_user(Plug.Conn.t(), any()) :: Plug.Conn.t()
-  def require_unauthenticated_user(conn, _opts) do
+  def require_unauthenticated_user(conn, _params) do
     if conn.assigns[:current_user] do
       conn
       |> redirect(to: "/")
@@ -100,7 +100,7 @@ defmodule CopilotWeb.Authentication do
   end
 
   @spec require_authenticated_user(Plug.Conn.t(), any()) :: Plug.Conn.t()
-  def require_authenticated_user(conn, _opts) do
+  def require_authenticated_user(conn, _params) do
     if conn.assigns[:current_user] do
       conn
     else

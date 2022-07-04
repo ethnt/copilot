@@ -12,6 +12,15 @@ defmodule Copilot.ItinerariesTest do
     %{trip: trip, user: trip.user}
   end
 
+  describe "create_trip_changeset/2" do
+    test "returns a changeset", %{user: user} do
+      assert %Ecto.Changeset{} =
+               changeset = Itineraries.create_trip_changeset(%Itineraries.Trip{}, user)
+
+      assert changeset.required == [:name, :start_date, :end_date]
+    end
+  end
+
   describe "create_trip/2" do
     test "requires a name", %{user: user} do
       {:error, changeset} = Itineraries.create_trip(%{}, user)
@@ -36,6 +45,14 @@ defmodule Copilot.ItinerariesTest do
         Itineraries.create_trip(%{start_date: ~D[2020-01-01], end_date: ~D[2019-01-01]}, user)
 
       assert %{end_date: ["must be after the start date"]} = errors_on(changeset)
+    end
+  end
+
+  describe "update_trip_changeset/2" do
+    test "returns a changeset", %{trip: trip} do
+      assert %Ecto.Changeset{} = changeset = Itineraries.update_trip_changeset(trip)
+
+      assert changeset.required == [:name, :start_date, :end_date]
     end
   end
 

@@ -1,5 +1,6 @@
 .page {
-  margin-top: var(--spacing-m);
+  margin: var(--spacing-l) auto;
+  max-width: var(--breakpoint);
 }
 
 .page__title {

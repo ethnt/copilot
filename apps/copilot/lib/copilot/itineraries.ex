@@ -31,6 +31,22 @@ defmodule Copilot.Itineraries do
   end
 
   @doc """
+  Returns a changeset for tracking changes to trip creation
+  """
+  @spec create_trip_changeset(%Trip{}, User.t(), map()) :: Ecto.Changeset.t()
+  def create_trip_changeset(%Trip{} = trip, user, attrs \\ %{}) do
+    Trip.create_changeset(trip, attrs, user)
+  end
+
+  @doc """
+  Returns a changeset for tracking changes to trip modification
+  """
+  @spec update_trip_changeset(Trip.t(), map()) :: Ecto.Changeset.t()
+  def update_trip_changeset(trip, attrs \\ %{}) do
+    Trip.update_changeset(trip, attrs)
+  end
+
+  @doc """
   Update a trip
   """
   @spec update_trip(Trip.t(), map()) :: {:ok, Trip.t()} | {:error, Ecto.Changeset.t()}

@@ -50,7 +50,7 @@ defmodule CopilotWeb.UserResetPasswordController do
   end
 
   @spec fetch_user_by_reset_password_token(Plug.Conn.t(), any()) :: Plug.Conn.t()
-  defp fetch_user_by_reset_password_token(conn, _opts) do
+  defp fetch_user_by_reset_password_token(conn, _params) do
     %{"token" => token} = conn.params
 
     if user = Accounts.find_user_by_reset_password_token(token) do

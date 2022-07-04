@@ -1,5 +1,6 @@
 <div class="page">
   <h2 class="page__title">Trips</h2>
+  <p><a href={Routes.trips_path(@conn, :new)}>New</a></p>
    <%= for trip <- @trips do %>
     <div class="card">
       <h3><a href={Routes.trips_path(@conn, :show, trip.id)}><%= trip.name %></a></h3>
